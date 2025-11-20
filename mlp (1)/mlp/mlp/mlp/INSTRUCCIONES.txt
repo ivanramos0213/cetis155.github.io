@@ -1,0 +1,134 @@
+====================================================================
+       CETIS 155 CLASSROOM - PLATAFORMA EDUCATIVA
+====================================================================
+
+TRANSFORMACIÓN COMPLETADA:
+- Eliminada funcionalidad de tienda en línea
+- Convertida en plataforma tipo Google Classroom
+- Mantiene diseño visual del CETIS 155
+
+====================================================================
+INSTALACIÓN Y CONFIGURACIÓN
+====================================================================
+
+1. CONFIGURAR BASE DE DATOS
+   - Abrir XAMPP e iniciar MySQL
+   - Abrir phpMyAdmin (http://localhost/phpmyadmin)
+   - Importar el archivo: schema.sql
+   - Esto creará la base de datos "medi_db" con todas las tablas necesarias
+
+2. INSTALAR DEPENDENCIAS
+   Ejecutar en terminal:
+   pip install flask mysql-connector-python werkzeug
+
+3. INICIAR LA APLICACIÓN
+   python app.py
+
+   La aplicación estará disponible en: http://127.0.0.1:5000
+
+====================================================================
+CREDENCIALES DE ACCESO
+====================================================================
+
+ADMINISTRADOR (Acceso total al sistema):
+  Usuario: admin
+  Contraseña: admin
+
+PROFESORES DE EJEMPLO (Contraseña: 123):
+  - prof_matematicas
+  - prof_fisica
+
+ALUMNOS DE EJEMPLO (Contraseña: 123):
+  - alumno01
+  - alumno02
+
+====================================================================
+FUNCIONALIDADES POR ROL
+====================================================================
+
+ALUMNOS:
+  ✓ Unirse a clases con código de 6 caracteres
+  ✓ Ver todas las clases inscritas
+  ✓ Ver tareas pendientes y completadas
+  ✓ Entregar tareas
+  ✓ Ver calificaciones y comentarios de profesores
+
+PROFESORES:
+  ✓ Crear nuevas clases (se genera código automático)
+  ✓ Ver alumnos inscritos en cada clase
+  ✓ Crear tareas con fecha límite y puntos
+  ✓ Recibir entregas de alumnos
+  ✓ Calificar entregas y agregar comentarios
+
+ADMINISTRADOR:
+  ✓ Panel completo de administración
+  ✓ Gestionar todos los usuarios (crear, editar, eliminar)
+  ✓ Gestionar todas las clases
+  ✓ Gestionar todas las tareas
+  ✓ Ver todas las entregas del sistema
+  ✓ Control total de la base de datos desde la interfaz web
+
+====================================================================
+ESTRUCTURA DE LA BASE DE DATOS
+====================================================================
+
+TABLAS PRINCIPALES:
+  - usuarios: Almacena alumnos, profesores y administradores
+  - clases: Información de cada clase (nombre, código, profesor)
+  - alumnos_clases: Relación entre alumnos y clases inscritas
+  - tareas: Tareas creadas por profesores
+  - entregas: Entregas de tareas por alumnos (con calificaciones)
+
+====================================================================
+FLUJO DE TRABAJO TÍPICO
+====================================================================
+
+PROFESOR:
+1. Iniciar sesión
+2. Crear una nueva clase
+3. Compartir el código de clase con los alumnos
+4. Crear tareas para la clase
+5. Revisar entregas y calificar
+
+ALUMNO:
+1. Registrarse en la plataforma
+2. Unirse a clase con el código proporcionado
+3. Ver tareas pendientes
+4. Entregar tareas antes de la fecha límite
+5. Consultar calificaciones
+
+ADMIN:
+1. Iniciar sesión con credenciales admin/admin
+2. Acceder al panel de administración
+3. Gestionar usuarios, clases, tareas según necesidad
+4. Monitorear actividad del sistema
+
+====================================================================
+ARCHIVOS PRINCIPALES
+====================================================================
+
+app.py              - Aplicación Flask con todas las rutas
+schema.sql          - Script SQL para crear la base de datos
+templates/          - Plantillas HTML (index, dashboards, etc.)
+static/             - Archivos CSS, imágenes, fuentes
+
+====================================================================
+NOTAS IMPORTANTES
+====================================================================
+
+- El diseño mantiene los colores del CETIS 155 (azul #3b5998)
+- Las contraseñas están hasheadas por seguridad
+- Los códigos de clase son únicos y se generan automáticamente
+- Las fechas de entrega se verifican automáticamente
+- Sistema responsivo (funciona en móviles y tablets)
+
+====================================================================
+SOPORTE
+====================================================================
+
+Para dudas o problemas técnicos, consultar el código en app.py
+o revisar las plantillas HTML en la carpeta templates/
+
+====================================================================
+© 2025 CETIS 155 - Educación digital para todos
+====================================================================

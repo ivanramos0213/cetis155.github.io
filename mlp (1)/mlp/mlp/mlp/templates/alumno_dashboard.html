@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Alumno - CETIS 155</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+:root {
+  --azul: #3b5998;
+  --azul-claro: #dbe9f4;
+  --gris: #f0f0f0;
+  --blanco: #ffffff;
+  --texto: #2c2c2c;
+  --sombra: 0 8px 20px rgba(0, 0, 0, 0.08);
+  --radius: 12px;
+}
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--gris);
+  color: var(--texto);
+  padding-top: 70px;
+}
+.navbar {
+  background: var(--blanco);
+  box-shadow: var(--sombra);
+}
+.navbar-brand {
+  font-weight: 700;
+  color: var(--azul) !important;
+}
+.card {
+  border: none;
+  border-radius: var(--radius);
+  box-shadow: var(--sombra);
+  margin-bottom: 20px;
+}
+.btn-primary {
+  background: var(--azul);
+  border: none;
+}
+.btn-primary:hover {
+  background: #2d4373;
+}
+  </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="{{ url_for('index') }}">CETIS 155 Classroom</a>
+    <div class="ms-auto">
+      <a href="{{ url_for('alumno_dashboard') }}" class="btn btn-sm btn-outline-primary me-2">Mis Clases</a>
+      <a href="{{ url_for('logout') }}" class="btn btn-sm btn-outline-danger">Salir</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container mt-4">
+  <h2>📚 Mis Clases</h2>
+
+  <!-- Formulario para unirse a clase -->
+  <div class="card">
+    <div class="card-body">
+      <h5>🔗 Unirse a una clase</h5>
+      <form method="POST" action="{{ url_for('unirse_clase') }}">
+        <div class="input-group">
+          <input type="text" name="codigo" class="form-control" placeholder="Ingresa el código de clase" required>
+          <button class="btn btn-primary" type="submit">Unirse</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Lista de clases -->
+  <div class="row">
+    {% for clase in clases %}
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">{{ clase.nombre }}</h5>
+          <p class="card-text text-muted">Profesor: {{ clase.profesor_nombre }}</p>
+          <p class="card-text"><small>Código: <strong>{{ clase.codigo }}</strong></small></p>
+          <a href="{{ url_for('ver_clase_alumno', clase_id=clase.id) }}" class="btn btn-primary btn-sm">Ver Clase</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <h3 class="mt-4">📝 Tareas Pendientes</h3>
+  <div class="card">
+    <div class="card-body">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Tarea</th>
+            <th>Clase</th>
+            <th>Fecha Entrega</th>
+            <th>Estado</th>
+            <th>Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for tarea in tareas %}
+          <tr>
+            <td>{{ tarea.titulo }}</td>
+            <td>{{ tarea.clase_nombre }}</td>
+            <td>{{ tarea.fecha_entrega.strftime('%d/%m/%Y %H:%M') if tarea.fecha_entrega }}</td>
+            <td>
+              {% if tarea.entrega_id %}
+                {% if tarea.calificacion %}
+                  <span class="badge bg-success">Calificada: {{ tarea.calificacion }}</span>
+                {% else %}
+                  <span class="badge bg-warning">Entregada</span>
+                {% endif %}
+              {% else %}
+                <span class="badge bg-danger">Pendiente</span>
+              {% endif %}
+            </td>
+            <td>
+              {% if not tarea.entrega_id %}
+                <a href="{{ url_for('entregar_tarea', tarea_id=tarea.id) }}" class="btn btn-sm btn-primary">Entregar</a>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

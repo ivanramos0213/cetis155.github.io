@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CETIS 155 - Plataforma Educativa</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+:root {
+  --azul: #3b5998;
+  --azul-claro: #dbe9f4;
+  --gris: #f0f0f0;
+  --blanco: #ffffff;
+  --texto: #2c2c2c;
+  --sombra: 0 8px 20px rgba(0, 0, 0, 0.08);
+  --radius: 12px;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--gris);
+  color: var(--texto);
+  margin: 0;
+}
+
+/* NAVBAR */
+.navbar {
+  background: var(--blanco);
+  box-shadow: var(--sombra);
+  padding: 12px 0;
+}
+
+.navbar-brand {
+  font-weight: 700;
+  color: var(--azul) !important;
+  font-size: 1.4rem;
+}
+
+.nav-link {
+  font-weight: 500;
+  color: var(--texto) !important;
+  transition: 0.3s;
+}
+
+.nav-link:hover {
+  color: var(--azul) !important;
+}
+
+/* HERO */
+.hero {
+  background: var(--azul-claro);
+  height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+.hero p {
+  font-size: 1.2rem;
+  max-width: 600px;
+  margin: 0 auto 30px;
+}
+
+.btn-hero {
+  background: var(--azul);
+  color: var(--blanco);
+  border-radius: 8px;
+  padding: 12px 28px;
+  font-weight: 600;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.btn-hero:hover {
+  background: var(--texto);
+}
+
+/* BENEFICIOS */
+.benefits {
+  background: var(--blanco);
+  padding: 60px 20px;
+  border-radius: 20px;
+  margin-top: -40px;
+  box-shadow: var(--sombra);
+  position: relative;
+  z-index: 2;
+}
+
+.benefits h2 {
+  text-align: center;
+  font-weight: 700;
+  color: var(--azul);
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.benefits p.subtitle {
+  text-align: center;
+  color: #555;
+  margin-bottom: 40px;
+}
+
+.card-benefit {
+  border: none;
+  border-radius: var(--radius);
+  background: var(--azul-claro);
+  text-align: center;
+  padding: 25px 20px;
+  transition: all 0.3s ease;
+}
+
+.card-benefit:hover {
+  background: var(--azul);
+  color: var(--blanco);
+}
+
+/* FOOTER */
+footer {
+  background: var(--azul);
+  color: var(--blanco);
+  text-align: center;
+  padding: 30px 10px;
+  font-size: 14px;
+  margin-top: 60px;
+}
+
+footer span {
+  font-weight: 600;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .hero h1 { font-size: 2.2rem; }
+  .hero p { font-size: 1rem; }
+  .card-benefit { margin-bottom: 20px; }
+}
+  </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="{{ url_for('index') }}">
+      CETIS 155 Classroom
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <ul class="navbar-nav align-items-center">
+        {% if 'usuario' in session %}
+          <li class="nav-item me-3"><span class="nav-link">👋 {{ session['usuario'] }}</span></li>
+          {% if session['rol'] == 'admin' %}
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_panel') }}">Panel Admin</a></li>
+          {% elif session['rol'] == 'profesor' %}
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('profesor_dashboard') }}">Mis Clases</a></li>
+          {% else %}
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('alumno_dashboard') }}">Mis Clases</a></li>
+          {% endif %}
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Salir</a></li>
+        {% else %}
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('register') }}">Registrarse</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('login') }}">Iniciar sesión</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div>
+    <h1>📚 CETIS 155 Classroom</h1>
+    <p>Plataforma educativa para gestionar clases, tareas y colaborar con profesores y alumnos.</p>
+    {% if 'usuario' in session %}
+      {% if session['rol'] == 'alumno' %}
+        <a href="{{ url_for('alumno_dashboard') }}" class="btn btn-hero">Ir a Mis Clases</a>
+      {% elif session['rol'] == 'profesor' %}
+        <a href="{{ url_for('profesor_dashboard') }}" class="btn btn-hero">Gestionar Clases</a>
+      {% else %}
+        <a href="{{ url_for('admin_panel') }}" class="btn btn-hero">Panel de Administración</a>
+      {% endif %}
+    {% else %}
+      <a href="{{ url_for('login') }}" class="btn btn-hero me-3">Iniciar Sesión</a>
+      <a href="{{ url_for('register') }}" class="btn btn-hero">Registrarse</a>
+    {% endif %}
+  </div>
+</section>
+
+<!-- BENEFICIOS -->
+<section class="benefits container">
+  <h2>Características de la Plataforma</h2>
+  <p class="subtitle">Aprendizaje organizado y colaborativo 📖</p>
+  <div class="row g-4 justify-content-center">
+    <div class="col-md-4">
+      <div class="card-benefit">
+        <h5>🎓 Clases Organizadas</h5>
+        <p>Únete a clases con códigos únicos y accede a todo el material educativo.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card-benefit">
+        <h5>📝 Gestión de Tareas</h5>
+        <p>Profesores asignan tareas, alumnos las entregan y reciben calificaciones.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card-benefit">
+        <h5>⚙️ Panel de Administración</h5>
+        <p>Control completo de usuarios, clases y tareas desde un solo lugar.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  📚 <span>CETIS 155 Classroom</span> — Educación digital para todos.
+  <br>© 2025 | Todos los derechos reservados.
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

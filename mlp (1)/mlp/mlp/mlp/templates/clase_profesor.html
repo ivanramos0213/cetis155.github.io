@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Clase - Profesor</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>body{padding-top:70px;background:#f0f0f0;}</style>
+</head><body>
+<nav class="navbar navbar-expand-lg fixed-top bg-primary"><div class="container">
+<a class="navbar-brand text-white" href="{{ url_for('profesor_dashboard') }}">Volver</a>
+</div></nav>
+<div class="container mt-4">
+<h2>{{ clase.nombre }}</h2>
+<p class="text-muted">Código: <strong>{{ clase.codigo }}</strong></p>
+<ul class="nav nav-tabs" role="tablist">
+<li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#tareas">Tareas</a></li>
+<li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#alumnos">Alumnos</a></li>
+</ul>
+<div class="tab-content mt-3">
+<div id="tareas" class="tab-pane fade show active">
+<button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#crearTarea">+ Nueva Tarea</button>
+<table class="table bg-white"><thead><tr><th>Título</th><th>Fecha</th><th>Puntos</th><th>Entregas</th><th>Acción</th></tr></thead>
+<tbody>{% for tarea in tareas %}
+<tr><td>{{ tarea.titulo }}</td><td>{{ tarea.fecha_entrega.strftime('%d/%m/%Y %H:%M') if tarea.fecha_entrega }}</td>
+<td>{{ tarea.puntos }}</td><td>{{ tarea.entregas_count }}</td>
+<td><a href="{{ url_for('ver_entregas', tarea_id=tarea.id) }}" class="btn btn-sm btn-info">Ver</a></td></tr>
+{% endfor %}</tbody></table>
+</div>
+<div id="alumnos" class="tab-pane fade">
+<table class="table bg-white"><thead><tr><th>Nombre</th><th>Correo</th><th>Fecha Inscripción</th></tr></thead>
+<tbody>{% for alumno in alumnos %}
+<tr><td>{{ alumno.nombre_completo }}</td><td>{{ alumno.correo }}</td>
+<td>{{ alumno.fecha_inscripcion.strftime('%d/%m/%Y') if alumno.fecha_inscripcion }}</td></tr>
+{% endfor %}</tbody></table>
+</div>
+</div></div>
+<div class="modal fade" id="crearTarea"><div class="modal-dialog"><div class="modal-content">
+<div class="modal-header"><h5>Crear Tarea</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+<form method="POST" action="{{ url_for('crear_tarea', clase_id=clase.id) }}"><div class="modal-body">
+<div class="mb-3"><label>Título</label><input type="text" name="titulo" class="form-control" required></div>
+<div class="mb-3"><label>Descripción</label><textarea name="descripcion" class="form-control" rows="3" required></textarea></div>
+<div class="mb-3"><label>Fecha Entrega</label><input type="datetime-local" name="fecha_entrega" class="form-control" required></div>
+<div class="mb-3"><label>Puntos</label><input type="number" name="puntos" class="form-control" value="100" required></div>
+</div><div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+<button type="submit" class="btn btn-primary">Crear</button>
+</div></form></div></div></div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body></html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Clase - Alumno</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>body{padding-top:70px;background:#f0f0f0;}</style>
+</head><body>
+<nav class="navbar navbar-expand-lg fixed-top bg-primary"><div class="container">
+<a class="navbar-brand text-white" href="{{ url_for('alumno_dashboard') }}">Volver</a>
+</div></nav>
+<div class="container mt-4">
+<h2>{{ clase.nombre }}</h2>
+<p class="text-muted">{{ clase.descripcion }}</p>
+<p><strong>Profesor:</strong> {{ clase.profesor_nombre }} ({{ clase.profesor_correo }})</p>
+<p><strong>Código:</strong> {{ clase.codigo }}</p>
+<h4 class="mt-4">Tareas</h4>
+<table class="table bg-white"><thead><tr>
+<th>Título</th><th>Fecha</th><th>Puntos</th><th>Estado</th><th>Calificación</th><th>Acción</th>
+</tr></thead><tbody>
+{% for tarea in tareas %}
+<tr><td>{{ tarea.titulo }}</td>
+<td>{{ tarea.fecha_entrega.strftime('%d/%m/%Y %H:%M') if tarea.fecha_entrega }}</td>
+<td>{{ tarea.puntos }}</td>
+<td>{% if tarea.entrega_id %}
+{% if tarea.calificacion %}<span class="badge bg-success">Calificada</span>
+{% else %}<span class="badge bg-warning">Entregada</span>{% endif %}
+{% else %}<span class="badge bg-danger">Pendiente</span>{% endif %}</td>
+<td>{{ tarea.calificacion or '-' }}</td>
+<td><a href="{{ url_for('entregar_tarea', tarea_id=tarea.id) }}" class="btn btn-sm btn-primary">
+{% if tarea.entrega_id %}Editar{% else %}Entregar{% endif %}</a></td></tr>
+{% endfor %}
+</tbody></table></div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body></html>
